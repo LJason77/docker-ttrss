@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:alpine
+    container_name: postgres
+    restart: always
+    environment: 
+      POSTGRES_USER: ttrss
+      POSTGRES_PASSWORD: ttrss
+    volumes:
+      - /mnt/Data/postgresql:/var/lib/postgresql/data
+  ttrss:
+    image: ttrss
+    container_name: ttrss
+    build: .
+    restart: always
+    ports: 
+      - "3000:3000"
+    command: supervisord -c /var/supervisord.conf
+    depends_on: 
+      - postgres
